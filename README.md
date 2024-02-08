@@ -5,6 +5,8 @@
 <h1>osTicket - Prerequisites and Installation</h1>
 This tutorial outlines the prerequisites and installation of the open-source help desk ticketing system osTicket.<br />
 
+
+
 <h2>Environments and Technologies Used</h2>
 
 - Microsoft Azure (Virtual Machines/Compute)
@@ -13,228 +15,313 @@ This tutorial outlines the prerequisites and installation of the open-source hel
 
 <h2>Operating Systems Used </h2>
 
-- Windows Windows 10 (21H2)
+- Windows 10</b> (21H2)
 
 <h2>List of Prerequisites</h2>
 
-- Connect to your Virtual Machine with Remote Desktop
-- Install / Enable IIS in Windows
-- Install Web Platform Installer
-- Install osTicket v1.15.8
-- Download and Install HeidiSQL
-- Created database for "osTicket
-- Clean up 
-- Change File Permissions
+- Azure Virtual Machine
+- Internet Information Services (IIS)
+- PHP Manager
+- Rewrite Module
+- VC Redist
+- MySQL
+- Heidi SQL
+- osTicket v1.15.8
+- Link to downloads: https://drive.google.com/drive/u/0/folders/1APMfNyfNzcxZC6EzdaNfdZsUwxWYChf6
+
 
 <h2>Installation Steps</h2>
 
-   >**Note**: Create a Windows 10 Virtual Machine with 2 or 4 virtual CPUS to ensure that you are not troubled with hiccups  and slow movement throughout the lab.
-Allow the VM to create a new Vnet which should be done by default.
 
-We can do a quick search for `Virtual Machine` and as we create the virtual machine, we will have the option to create the Resource Group. Here we select `Create New` to name the name the Resource Group 'RG-osTicket' and build out the Virtual Machine (VM) with the provided settings pictured (below). 
+1.) The first thing you are going to want to do is create a virtual machine by going to https://portal.azure.com/. Setup your virtual machine with Windows 10 Pro, version 22H2. Note, you will want to create a virtual machine with atleast 2 vcpus and 16 gbs of memory.
 
-<p align="center"><img src="https://i.imgur.com/jz0e59n.png" height="70%" width="70%" alt="image of vm settings"/> </p>
-
-   >**Note**: Be sure to check the box recognizing 'I confirm I have an eligible Windows 10/11 license with multi-tenant hosting rights.' or else you will receive a validation error message when you choose to 'Review + Create'.
-    
-<p align="center">
-<img src="https://i.imgur.com/yFq2KcG.png" height="70%" width="70%" alt="image of vm username password"/> </p>
-
-We will need connect to our Virtual Machine with Remote Desktop using the VM's `public IP address`. 
-
-<p align="center">
-<img src="https://i.imgur.com/DGOWrS5.png" height="80%" width="80%" alt="image of public IP address"/>
-</p>
-
-<br />
-
-To connect to the virtual machine, we search on the local machine for 'Remote Desktop Connection' and the following window opens and you can now copy and paste the `public IP address` into the provided space. Then press the `Connect` button. 
-
-
-<p align="center">
-<img src="https://i.imgur.com/06af4yH.png" height="50%" width="50%" alt="Disk Sanitization Steps"/>
-</p>
-
-<br/>
-
-Once you are connected and inside the virtual machine we will need to install the Web Platform Installer. To install the Web Platform Installer we will search for the Control Panel --> under programs select `Uninstall a Program`.
-
-<p align="center">
-<img src="https://i.imgur.com/YlZlw6C.png" height="80%" width="80%" alt="unistall a program"/>
+2.) Once you have created your virtual machine you will want to conncet to it by using the public ip address the vm is setup with. You will connect using the remote desktop connection app. 
 </p>
 <br />
 
-After we've reached the next page, we can now select to `Turn Windows features on or off` --> then enable the 'Internet Information Services' (IIS) from the available services.
+<p>
+<img src="https://imgur.com/MAhXK2e.png" height="80%" width="80%" alt="Disk Sanitization Steps"/>
+</p>
+<p>
+<p>
+<img src="https://imgur.com/Zf2jw07.png" height="40%" width="40%" alt="Disk Sanitization Steps"/>
+</p>
+<p>
+  
+3.) Once you have connected to your virtual machine you will want to go to your control panel. From the control panel open up programs. Select, Turn Windows features on and off.
 
-<p align="center">
-<img src="https://i.imgur.com/XYQQlpa.png" height="80%" width="80%" alt="enable IIS"/>
+<p>
+<img src="https://imgur.com/fGXMpx4.png" height="40%" width="40%" alt="Disk Sanitization Steps"/>
 </p>
-<br/>
-<p>Now we can download and install Web Platform Installers. Web Platform Installers (WebPI) provides a simplified installation workflow for installing common open source web applications and web platform technologies.</p>
-<p align="center">
-<img src="https://i.imgur.com/59FS3S4.png" height="65%" width="65%" alt="download WebPI"/>
-<br/>
-<p> Once WebPI is installed, we can now add MySQL 5.5 database, PHP 5.6.31, and the various verisons of between PHP (x86) 7.0 and 7.3.</p>
-<p align="center">
-<img src="https://i.imgur.com/SwHYmt7.png" height="650%" width="65%" alt="image of add MySql"/>
+<p>
+  
+<p>
+<img src="https://imgur.com/LBGkAw6.png" height="40%" width="40%" alt="Disk Sanitization Steps"/>
 </p>
-</br>
-<p align="center">
-<img src="https://i.imgur.com/DwQqpH8.png" height="65%" width="65%" alt="install PHP"/>
+<p>
+  
+4.) You will want to install / enable IIS in Windows with CGI and Common HTTP Features
+  - World Wide Web Services -> Application Development Features -> 
+[X] CGI
+[X] Common HTTP Features
+  
+<p>
+<img src="https://imgur.com/LQjw9le.png" height="40%" width="40%" alt="Disk Sanitization Steps"/>
 </p>
-<br/>
-<p>MySQL 5.5 will require a name and password, root and Password1 respectively when you try to install. Make note of the name / password in a text file as you will need it again later on in the installation process.</p>
-<p align="center">
-<img src="https://i.imgur.com/IIFCRPG.png" height="65%" width="65%" alt="password request"/>
+<p>
+  
+<p>
+<img src="https://imgur.com/pbPeHb1.png" height="40%" width="40%" alt="Disk Sanitization Steps"/>
 </p>
-<p>If necessary, fix any failures (download from within lab files:
-Fix any failures in the installation by going to Google Drive to <a href="https://drive.google.com/drive/u/1/folders/1APMfNyfNzcxZC6EzdaNfdZsUwxWYChf6">download </a> and install PHP 7.3.8, PHP Manager, and Microsoft Visual C++ 2009 Redistributable Package.
-</p>
-<p>From the downloaded files, we can now install and extract the osTicket file. Extract and copy the “upload” folder INTO c:\inetpub\wwwroot 3. Within c:\inetpub\wwwroot, Rename “upload” to “osTicket”</p>
-<p align="center">
-<img src="https://i.imgur.com/F1wPGL1.png" height="65%" width="65%" alt="exacted osTicket files."/>                                                                        </p>
-
- -Reload IIS (Open IIS, Restart the server)** 1. Go to sites -> Default -> osTicket 2. On the right, click `Browse *:80`
+<p>
+  
+***NOTE*** Make sure all Common HTTP Features are checked.
  
- <p align="center">
-    <img src="https://i.imgur.com/A8LBhGS.png" height="65%" width="65%" alt="IIS restart"/>
-    </p>
-    <p align="center"> 
-<img src="https://i.imgur.com/bbcdcJo.png" height=45% width="45%" alt="browse: 80"/>
-    </p> 
-    </br>
-    
-Once `browse: 80` is selected a browser window will open presenting osTicket installer page along with the recommendation/prerequisites of use.
-    
- <p align="center">
-    <img src="https://i.imgur.com/wcCxx5C.png" height="45%" width="45%" alt="os ticket installer"/>
-    </p>
-    </br>
-    
-Next we'll go back to IIS, sites -> Default -> 1. `osTicket` 2. Double-click `PHP Manager` 3. Click `Enable or disable an extension` 1. Enable: `php_imap.dll` 2. Enable: `php_intl.dll` 3. Enable: `php_opcache.dll` -
-
- <p align="center"<img src="https://i.imgur.com/YVjKOMp.png" height="50%" width="50%" alt="php manager"/>
- </p>
- <br/>
- <p align="center">
- <img src="https://i.imgur.com/elGuTsd.png" height="45%" width="45%" alt="php extension enabled"/>
- </p>
- <br/>
- <p align="center">
- <img src="https://i.imgur.com/cMtCuaA.png" height="45%" width="45%" alt="php extension enabled"/>
- </p>
- <br/>
-Refresh the osTicket site in your browser to see what has changed after enabling the PHP extensions  
-<p align="center">
-<img src="https://i.imgur.com/PPNziV5.png" height="45%" width="45%" alt="refreshed osticket installer"/>
- </p>
- <br/>
- 
-Rename: From: `C:\inetpub\wwwroot\osTicket\include\ost-sampleconfig.php` --->	To: `C:\inetpub\wwwroot\osTicket\include\ost-config.php`
- 
- <p align="center">
- <img src="https://i.imgur.com/u0bCrDC.png" height="50%" width="50%" alt="ost-sample image"/>
- </p>
-<p align="center">
- <img src="https://i.imgur.com/mkBhToH.png" height="50%" width="50%" alt="ost-config image"/>
- </p>
-<hr>
-
-Assign Permissions: ost-config.php 
- To change the permissions, right-click ost-config --> select '`properties`' --> select the '`Security`' tab at the top --> select the '`Advanced`' button1. Disable inheritance -> Remove All 2. New Permissions -> Everyone -> All
- 
- <p align="center">
- <img src="https://i.imgur.com/Ds8JUvt.png" height="50%" width="50%" alt="properties selection"/>
- </p>
- <p align="center">
- <img src="https://i.imgur.com/rKhcHkW.png" height="50%" width="50%" alt="change permissions"/>
+ To make sure the IIS is installed / enabled go to a browser of your choice and search for 127.0.0.1 
+  It should look something like this. 
+  
+<p>
+<img src="https://imgur.com/eICujoq.png" height="40%" width="40%" alt="Disk Sanitization Steps"/>
 </p>
-<br/>
-<p align="center">
-<img src="https://i.imgur.com/IxpkEaE.png" height="50%" width="50%" alt="disable inheritance"/>
- </p>
-<p align="center">
-<img src="https://i.imgur.com/xajjPGK.png" height="50%" width="50%" alt="remove all inherited"/>
- </p>
- 
-Then add new permissions for everyone and give Full Control.
-
-<p align="center">
- <img src="https://i.imgur.com/Q9XQLXm.png" height="50%" width="50%" alt="add permssions for everyone"/>
- </p>
- 
- After returning to the browser windows with osTicket installer and press '`Continue`', you will now see the below form to complete before continuing.  
- 
- <p align="center">
- <img src="https://i.imgur.com/fjKAgGk.png" height="50%" width="50%" alt="osticket form"/>
+<p>
+  
+  
+  
+  
+5.) Now that the IIS is enabled, From the Installation Files, download and install PHP Manager for IIS (PHPManagerForIIS_V1.5.0.msi)
+  Go through the install wizard and complete the install.
+  
+6.) Next from the Installation Files, download and install the Rewrite Module (rewrite_amd64_en-US.msi)
+  
+7.) Create a folder in the C drive called PHP.
+  
+8.) From the Installation Files, download PHP 7.3.8 (php-7.3.88-nts-Win32-VC15-x866.zip) and unzip the contents into C:\PHP
+  
+  !! ATTENTION !!
+If this appears, choose to “Keep” the file:
+  
+<p>
+<img src="https://imgur.com/xZv1Yhw.png" height="40%" width="40%" alt="Disk Sanitization Steps"/>
 </p>
+<p>
+  
+<p>
+<img src="https://imgur.com/YwBhqo0.png" height="40%" width="40%" alt="Disk Sanitization Steps"/>
+</p>
+<p>
 
-Download and install HeidiSQL from <a href="https://drive.google.com/drive/folders/1APMfNyfNzcxZC6EzdaNfdZsUwxWYChf6">Google Drive</a> using the provided defaults that are available in the install wizard.
- <hr>
-<p align="center">
- <img src="https://i.imgur.com/oImw5w0.png" height="50%" width="50%" alt="completion of heidisql install"/>
+9.) Once you have downloaded and extracted the zip file into the PHP folder on the C drive, download and install the VC_redist.x86.exe from the installation files. Go through the setup wizard to finish setting up and installing the VC_redist.x86.exe. 
+  
+10.) Download and install MySQL 5.5.62 (mysql-5.5.62-win32.msi)
+  Run the setup wizard:
+Typical Setup ->
+Launch Configuration Wizard (after install) ->
+Standard Configuration ->
 
-Next we will do the following in HeidiSql:
-<ol>
- <li>Create a new session, username:root/password:Password1</li>
- <li>Connect to the session</li>
-<li>Create a database called “osTicket”</li>
- </ol>
- <p align="center">
- <img src="https://i.imgur.com/D2QfMEb.png"  height="50%" width="50%" alt="create HeidiSql session"/> 
- </p>
- <p align="center">
- <img src="https://i.imgur.com/3bMHP2K.png" height="50%" width="50%" alt="create database HeidiSql"/> 
- </p>
+  Make the new root password: Password1
+  
+<p>
+<img src="https://imgur.com/KxcUy7C.png" height="40%" width="40%" alt="Disk Sanitization Steps"/>
+</p>
+<p>
+  
+  Execute the process on the next page.
+  
+<p>
+<img src="https://imgur.com/i7sn6hT.png" height="40%" width="40%" alt="Disk Sanitization Steps"/>
+</p>
+<p>
+  
+11.) Now that we have the files downloaded and installed we will want to search for IIS in the windows search bar. Open IIS as an administrator.
+  The program should look like this.
+  
+<p>
+<img src="https://imgur.com/rgdZwmM.png" height="40%" width="40%" alt="Disk Sanitization Steps"/>
+</p>
+<p>
+  
+12.) We will now want to register PHP from within IIS.
+  Click on PHP Manager
+  
+<p>
+<img src="https://imgur.com/vvTLNBH.png" height="40%" width="40%" alt="Disk Sanitization Steps"/>
+</p>
+<p>
+  
+Register new PHP version.
+  
+<p>
+<img src="https://imgur.com/qdbn5zQ.png" height="40%" width="40%" alt="Disk Sanitization Steps"/>
+</p>
+<p>
+  
+You will want to provide a path to the php executable file (php-cgi.exe)). 
+  Go to C Drive -> PHP -> click on php-cgi file.
+  
+<p>
+<img src="https://imgur.com/oJZ0gp9.png" height="40%" width="40%" alt="Disk Sanitization Steps"/>
+</p>
+<p>
+  
+  Restart the IIS server.
+  
+<p>
+<img src="https://imgur.com/CJ3RUbG.png" height="40%" width="40%" alt="Disk Sanitization Steps"/>
+</p>
+<p>
+  
+13.) Install osTicket v1.15.8
+  -Download osTicket from the Installation Files Folder
+  -Extract and copy "upload" folder to c:\inetpub\wwwroot
+  -Within c:\inetpub\root, Rename "upload" to "osTicket"
+  
+  Reload IIS again.
+  
+14.) On IIS go to sites -> Default -> osTicket
+  -On the right, click “Browse *:80”
+  
+<p>
+<img src="https://imgur.com/Yw55d5b.png" height="40%" width="40%" alt="Disk Sanitization Steps"/>
+</p>
+<p>
+  
+  Some extensions are not enabled on the osTicket browser.
+  
+<p>
+<img src="https://imgur.com/eJIsGTn.png" height="40%" width="40%" alt="Disk Sanitization Steps"/>
+</p>
+<p>
+  
+  To enable the extensions:
+  -Go back to IIS, sites -> Default -> osTicket
+  -Double click PHP manager
+  -Click "Enable or disable an extension"
+  
+<p>
+<img src="https://imgur.com/vvTLNBH.png" height="40%" width="40%" alt="Disk Sanitization Steps"/>
+</p>
+<p>
+  
+<p>
+<img src="https://imgur.com/uigyKjb.png" height="40%" width="40%" alt="Disk Sanitization Steps"/>
+</p>
+<p>
+  
+  We will want to enable three extensions from here.
+  
+  1.) php_imap.dll
  
- Created database for "osTicket":
- 
- <p align="center">
- <img src="https://i.imgur.com/mLg4tOl.png" height="50%" width="50%" alt="create data base osTicket"/> 
+  2.) php_intl.dll
+  
+  3.) php_opcache.dll
+  
+<p>
+<img src="https://imgur.com/cOem7Nb.png" height="40%" width="40%" alt="Disk Sanitization Steps"/>
 </p>
-<p> After the database is created, we can now enter those details into osTicket Installer 
-<li>MySQL Username: root</li>
- <li>MySQL Password: Password1</li>
-<li>Click <b><i>“Install Now!”</i></b></li>
+<p>
+  
+  
+15.) Once we have those extensions enabled in IIS, we are going to want to rename one of the files in our osTicket folder.
+  Go into the file explorer and search for C;\inetpub\wwwroot\osTicket\include\ost-sampleconfig.php
+  
+  We are going to rename the ost-sampleconfig.php to ost-config.php
+  
+  Now that we have renamed the files, right click on the file and go to properties.
+  From there click security, click on advance, and disable the inheritance.
+  We will select Remove all inherited permissions from this object.
+  
+  Now we will add new permissions.
+  
+  Click Add
+  
+<p>
+<img src="https://imgur.com/VPZvOdo.png" height="40%" width="40%" alt="Disk Sanitization Steps"/>
 </p>
-<p> Congratulations, hopefully it is installed with no errors!
+<p>
+  
+Select a principal
+  
+<p>
+<img src="https://imgur.com/PoGk34d.png" height="40%" width="40%" alt="Disk Sanitization Steps"/>
 </p>
-<p align="center">
- <img src="https://i.imgur.com/V3GSvvT.png" height="50%" width="50%" alt="congratulations of completion for osTicket"/>
+<p>
+  
+  
+ Type "Everyone" in the box.
+  
+<p>
+<img src="https://imgur.com/F4H3ppM.png" height="40%" width="40%" alt="Disk Sanitization Steps"/>
 </p>
-
-Results below are from of choosing for "`Your Staff Control Panel`" or "`Your osTicket URL:`"
- 
- <p align="center"><img src="https://i.imgur.com/LhTgI92.png" height="50%" width="50%" alt="available links to choose help desk or admin"/>
- </p>
- <p align="center">
- <img src="https://i.imgur.com/jNkPZNC.jpg" height="65%" width="65%" alt="Admin login for osTicket"/>
+<p>
+  
+  Make sure Full Control and all the other boxes are checked.
+  
+<p>
+<img src="https://imgur.com/rbbGqwB.png" height="40%" width="40%" alt="Disk Sanitization Steps"/>
 </p>
-
-"`Your osTicket URL`" will direct us to the "`End User`" Portal where Users can submit tickets for assistance from the help desk.
-
- <p align="center">
-  <img src="https://i.imgur.com/ErvbCg6.png" height="65%" width="65%" alt="End user login page to open/check ticket status"/>
-  </p>
-  <p> - <i>Clean up</i>
-    <ol>
-    <li> Delete: C:\inetpub\wwwroot\osTicket\setup</li>
-    <li> Set Permissions to “Read” only: C:\inetpub\wwwroot\osTicket\include\ost-config.php</li> 
-    <li><i>Login to the osTicket Admin Panel</i> ([http://localhost/osTicket/scp/login.php](http://localhost/osTicket/scp/login.php))
-  </p>
-  <p align="center">
- <img src="https://i.imgur.com/XGHz3lx.png" height="65%" width="65%" alt="delete setup folder"/>
- </p>
- 
-Set Permission to "`Read`" only can be acheived by choosing to right-click on '`ost-config.php`' --> select `properties` --> select the '`Security`' tab near the top --> then click the '`Advanced`' button (not pictured below) --> once `advanced settings` is selected, you can now select the '`Everyone`' principle and now we can select to choose '`Read`' only as the preferred permission(s)
-
- <p align="center">
- <img src="https://i.imgur.com/AXCIeQN.png"  height="65%" width="65%" alt="read-only permissions"/>
- </p>
- <p align="center">
- <img src="https://i.imgur.com/R11rIMd.png"  height="65%" width="65%" alt="read-only allow is shown for osticketcong file"/>
- </p>
- <br/>
-
-
-                                                                                 
+<p>
+  
+  Click Apply and Ok.
+  
+<p>
+<img src="https://imgur.com/saRO3y5.png" height="40%" width="40%" alt="Disk Sanitization Steps"/>
+</p>
+<p>
+  
+  Once that is done we will continue to setup osTicket in the browser. Click Continue on the osTicket browser page.
+  Fill out the page as required except the Database Settings at the bottom of the page. We will get to that. 
+  
+  We will want to download and install HeidiSQL from the Installation Files. 
+  
+<p>
+<img src="https://imgur.com/i7a4gWC.png" height="40%" width="40%" alt="Disk Sanitization Steps"/>
+</p>
+<p>
+  
+  When the program is open we will create a new session in it.
+  
+<p>
+<img src="https://imgur.com/g5M1i61.png" height="40%" width="40%" alt="Disk Sanitization Steps"/>
+</p>
+<p>
+  
+  We want to make sure the username is root and the password is Password1.
+  
+<p>
+<img src="https://imgur.com/LEAZNOc.png" height="40%" width="40%" alt="Disk Sanitization Steps"/>
+</p>
+<p>
+  
+  Once we are connected to the session we will go back to the browser to finish setting everything up. Under the Database Settings in the browser the username will be root and the password will be Password1.
+  
+  We will now create a new database within HeidiSQL. In Heidi right click on the left side where is says "Unnamed", select "create new", and then select "database". Name the new database osTicket. Once we have the new database setup go back to the osTicket browser and under MySQL Database type in osTicket.
+  
+<p>
+<img src="https://imgur.com/0rG1AJm.png" height="40%" width="40%" alt="Disk Sanitization Steps"/>
+</p>
+<p>
+  
+  The last step is to do some clean up. We will want to delete the setup folder in our system. 
+  -Delete: C:\inetpub\wwwroot\osTicket\setup
+  Only delete the setup folder and nothing else.
+  
+  We then will want to set the permissions back to "Read" only in the ost-config.php file.
+  
+<p>
+<img src="https://imgur.com/wFr0pkK.png" height="40%" width="40%" alt="Disk Sanitization Steps"/>
+</p>
+<p>
+  
+<p>
+<img src="https://imgur.com/jsJOPyn.png" height="40%" width="40%" alt="Disk Sanitization Steps"/>
+</p>
+<p>
+  
+  The last step after that is to login to osTicket on the browser.
+  
+<p>
+<img src="https://imgur.com/uHVdDsx.png" height="40%" width="40%" alt="Disk Sanitization Steps"/>
+</p>
+<p>
+  
+  Congrats! You have now successfully installed and setup osTicket!
